@@ -54,7 +54,14 @@ class Field_multiple
 		}
 		
 		// Go through and add the values
-		$items = explode(',', $input);
+		if (!is_array($input))
+		{
+			$items = explode(',', $input);
+		}
+		else
+		{
+			$items = $input;
+		}
 		
 		foreach ($items as $item)
 		{
