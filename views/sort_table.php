@@ -1,8 +1,15 @@
 <?php
 
 	if(!defined('PYROSTREAMS_MULT_JS_LOADED')):
-
-		echo '<script type="text/javascript" src="'.site_url('streams_core/field_asset/js/multiple/multiple_drag.js').'"></script>';
+		
+		if (substr(CMS_VERSION, 0, 3) == '2.1') {
+			$file = 'streams_core/field_asset/js/multiple/multiple_drag.js';
+		}
+		else {
+			$file = $this->module_details['path'] . '/field_types/multiple/js/multiple_drag.js';
+		}
+		
+		echo '<script type="text/javascript" src="'.site_url($file).'"></script>';
 		
 		define('PYROSTREAMS_MULT_JS_LOADED', TRUE);
 
@@ -29,6 +36,7 @@
 		          var new_list_id = ($old_list[0].id.slice(-1) == '1') ? '2' : '1';
 		          var $new_list = $('#' + $old_list[0].id.slice(0, $old_list[0].id.length - 1) + new_list_id);
 		          $.fn.drag_drop_selectable.moveBetweenLists($el.attr('dds'), $old_list.attr('dds'), $new_list.attr('dds'));
+		          <?php echo $slug; ?>_change($list);
 		      })
 		    );
 		});
