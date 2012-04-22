@@ -3,13 +3,13 @@
 	if(!defined('PYROSTREAMS_MULT_JS_LOADED')):
 		
 		if (substr(CMS_VERSION, 0, 3) == '2.1') {
-			$file = 'streams_core/field_asset/js/multiple/multiple_drag.js';
+			$streams = 'streams_core';
 		}
 		else {
-			$file = $this->module_details['path'] . '/field_types/multiple/js/multiple_drag.js';
+			$streams = 'streams';
 		}
 		
-		echo '<script type="text/javascript" src="'.site_url($file).'"></script>';
+		echo '<script type="text/javascript" src="'.site_url($streams . '/field_asset/js/multiple/multiple_drag.js').'"></script>';
 		
 		define('PYROSTREAMS_MULT_JS_LOADED', TRUE);
 
