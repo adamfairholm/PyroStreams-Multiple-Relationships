@@ -1,8 +1,15 @@
 <?php
 
 	if(!defined('PYROSTREAMS_MULT_JS_LOADED')):
-
-		echo '<script type="text/javascript" src="'.site_url('streams_core/field_asset/js/multiple/multiple_drag.js').'"></script>';
+		
+		if (substr(CMS_VERSION, 0, 3) == '2.1') {
+			$streams = 'streams_core';
+		}
+		else {
+			$streams = 'streams';
+		}
+		
+		echo '<script type="text/javascript" src="'.site_url($streams . '/field_asset/js/multiple/multiple_drag.js').'"></script>';
 		
 		define('PYROSTREAMS_MULT_JS_LOADED', TRUE);
 
@@ -17,9 +24,21 @@
 		    <?php echo $slug; ?>_change = function ( $list ){
 		    	$('input#<?php echo $slug; ?>').val($.dds.serialize( '<?php echo $slug; ?>_list_2' ));    
 		    }
-		    $('ul.<?php echo $slug; ?>_ml').drag_drop_selectable({
-		   	    onListChange:<?php echo $slug; ?>_change
+		    var $list = $('ul.<?php echo $slug; ?>_ml').drag_drop_selectable({
+		   	    onListChange: <?php echo $slug; ?>_change
 		    });
+		    // get all the items, and save them for future use
+		    $list.data('items', 
+		    	// and bind the double click event
+			    $list.find('li').bind('dblclick.dds_select',function(e){
+		          var $el = $(this);
+		          var $old_list = $el.parent();
+		          var new_list_id = ($old_list[0].id.slice(-1) == '1') ? '2' : '1';
+		          var $new_list = $('#' + $old_list[0].id.slice(0, $old_list[0].id.length - 1) + new_list_id);
+		          $.fn.drag_drop_selectable.moveBetweenLists($el.attr('dds'), $old_list.attr('dds'), $new_list.attr('dds'));
+		          <?php echo $slug; ?>_change($list);
+		      })
+		    );
 		});
 	})(jQuery);
 // ]]>
