@@ -414,14 +414,17 @@ $this->CI->db->join($stream->stream_prefix.$stream->stream_slug, 'jt.'.$stream->
 	{
 		$this->CI = get_instance();
 		
-		$this->CI->db->select('id, stream_name');
+		$this->CI->db->select('id, stream_name, stream_namespace');
 		$db_obj = $this->CI->db->get('data_streams');
 		
 		$streams = $db_obj->result();
 		
 		foreach ($streams as $stream)
 		{
-			$choices[$stream->id] = $this->CI->fields->translate_label($stream->stream_name);
+			if ($stream->stream_namespace)
+			{
+				$choices[$stream->stream_namespace][$stream->id] = $stream->stream_name;
+			}
 		}
 
 		// Is this an edit? and this has a field assignment
