@@ -341,10 +341,11 @@ class Field_multiple
 
 		if (is_numeric($entry_id))
 		{
-			$this->CI->db->where('jt.row_id', $entry_id, false);
-			$this->CI->db->from($join_table.' AS jt');
-$this->CI->db->join($stream->stream_prefix.$stream->stream_slug, 'jt.'.$stream->stream_slug.'_id = '.$stream->stream_prefix.$stream->stream_slug.'.id');
-			$query = $this->CI->db->get();
+
+			$query = $this->CI->db->from($join_table.' AS jt')
+								  ->join($stream->stream_prefix.$stream->stream_slug, 'jt.'.$stream->stream_slug.'_id = '.$stream->stream_prefix.$stream->stream_slug.'.id')
+								  ->where('jt.row_id', $entry_id, false)
+								  ->get();
 
 			foreach ($query->result() as $node)
 			{
