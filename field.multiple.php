@@ -67,8 +67,6 @@ class Field_multiple
 	 */
 	public $author					= array('name' => 'Adam Fairholm', 'url' => 'http://adamfairholm.com');
 
-	// --------------------------------------------------------------------------
-
 	/**
 	 * Pre Save
 	 *
@@ -117,8 +115,6 @@ class Field_multiple
 		}
 	}
 
-	// --------------------------------------------------------------------------
-
 	/**
 	 * Alt Pre Output
 	 *
@@ -129,7 +125,9 @@ class Field_multiple
 	 */
 	public function alt_pre_output($row_id, $extra, $type, $stream)
 	{
-		if ( ! $join_stream = $this->CI->streams_m->get_stream($extra['choose_stream'])) return null;
+		if ( ! $join_stream = $this->CI->streams_m->get_stream($extra['choose_stream'])) {
+			return null;
+		}
 
 		$title_column = $join_stream->title_column;
 		
@@ -166,8 +164,6 @@ class Field_multiple
 		
 		return $html;
 	}
-
-	// --------------------------------------------------------------------------
 	
 	/**
 	 * Alt Plugin Process
@@ -175,7 +171,7 @@ class Field_multiple
 	 * @param	array
 	 * @return	string
 	 */
-	public function alt_process_plugin($data)
+	public function plugin_override($data)
 	{
 		$params = $data['attributes'];
 		
@@ -203,8 +199,6 @@ class Field_multiple
 		
 		return $html;
 	}
-
-	// --------------------------------------------------------------------------
 	
 	/**
 	 * Join multiple hook
@@ -218,8 +212,6 @@ class Field_multiple
 		$this->CI->db->where($data['join_table'].'.row_id', $data['row_id']);
 	}
 
-	// --------------------------------------------------------------------------
-
 	/**
 	 * Event
 	 *
@@ -229,8 +221,6 @@ class Field_multiple
 	{
 		$this->CI->type->add_css('multiple', 'multiple.css');
 	}
-
-	// --------------------------------------------------------------------------
 	
 	/**
 	 * Process for when adding field assignment
@@ -263,12 +253,10 @@ class Field_multiple
            );
 		
 		$this->CI->dbforge->add_field($fields);
-		$this->CI->dbforge->add_key('id', TRUE);
+		$this->CI->dbforge->add_key('id', true);
 		
 		$this->CI->dbforge->create_table($table_name);
 	}
-
-	// --------------------------------------------------------------------------
 
 	/**
 	 * Process for when removing field assignment
@@ -295,8 +283,6 @@ class Field_multiple
 		$this->CI->dbforge->drop_table($table_name);
 	}
 
-	// --------------------------------------------------------------------------
-
 	/**
 	 * Entry delete
 	 *
@@ -315,8 +301,6 @@ class Field_multiple
 		$this->CI->db->where('row_id', $entry->id)->delete($table_name);
 	}
 
-	// --------------------------------------------------------------------------
-
 	/**
 	 * Process renaming column
 	 *
@@ -328,8 +312,6 @@ class Field_multiple
 	{
 		return null;
 	}
-
-	// --------------------------------------------------------------------------
 
 	/**
 	 * Output form input
@@ -401,7 +383,7 @@ class Field_multiple
         }
 
 			// We need the imploded current string as well
-        $form_data['current_string'] = $this->CI->input->post($form_data['slug']);
+       		$form_data['current_string'] = $this->CI->input->post($form_data['slug']);
 	    }
 	    else {		
 		
@@ -426,8 +408,6 @@ class Field_multiple
 
 		return $this->CI->type->load_view('multiple', 'sort_table', $form_data, true);
 	}
-
-	// --------------------------------------------------------------------------
 
 	/**
 	 * Get a list of streams to choose from
