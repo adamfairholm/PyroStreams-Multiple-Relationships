@@ -11,6 +11,8 @@
  */
 class Field_multiple
 {
+	public $field_type_name 		= 'Multiple Relationship';
+	
 	public $field_type_slug			= 'multiple';
 	
 	public $alt_process				= true;
