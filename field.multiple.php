@@ -76,7 +76,7 @@ class Field_multiple
 	 * @param	int $id The id of the row we are saving to
 	 * @return	void
 	 */
-	public function pre_save($input, $field, $stream, $id)
+	public function pre_save($input, $field, $stream, $id, $form_data)
 	{
 		// Get the other stream & table name
 		$linked_stream = $this->CI->streams_m->get_stream($field->field_data['choose_stream']);
@@ -85,8 +85,8 @@ class Field_multiple
 		// Are we editing this row?
 		// If so, clear the data. We are just going to
 		// replace it so now sense in trying to update it
-		if (is_numeric($row_id = $this->CI->input->post('row_edit_id'))) {
-			$this->CI->db->where('row_id', $this->CI->input->post('row_edit_id'))->delete($table_name);
+		if (is_numeric($row_id = $form_data['row_edit_id'])) {
+			$this->CI->db->where('row_id', $form_data['row_edit_id'])->delete($table_name);
 		}
 		else {
 			$row_id = $id;
@@ -101,15 +101,26 @@ class Field_multiple
 		}
 		
 		foreach ($items as $item) {
-			if (trim($item) == '') continue;
+			
+			if (trim($item) == '') {
+				continue;
+			}
 
-			$item_id = str_replace($field->field_slug.'_', '', $item);
+			// We get numeric items from the 
+			// multiselect, and it is more complex
+			// from the drag/drop interface.
+			if (is_numeric($item)) {
+				$item_id = $item;
+			} else {
+				$item_id = str_replace($field->field_slug.'_', '', $item);
+			}
 
 			$insert_data = array(
 				'row_id'							=> $row_id,
 				$stream->stream_slug.'_id'			=> $stream->id,
 				$linked_stream->stream_slug.'_id'	=> $item_id
              );
+			print_r($insert_data);
 			
 			$this->CI->db->insert($table_name, $insert_data);
 		}
@@ -166,19 +177,17 @@ class Field_multiple
 	}
 	
 	/**
-	 * Alt Plugin Process
+	 * Plugin Override
 	 *
 	 * @param	array
 	 * @return	string
 	 */
 	public function plugin_override($data)
 	{
-		// @todo
-
-		$params = $data['attributes'];
+		return $this->attribute('field');
 		
 		// Get the stream
-		$join_stream = $this->CI->streams_m->get_stream($data['field']->field_data['choose_stream']);
+		/*$join_stream = $this->CI->streams_m->get_stream($data['field']->field_data['choose_stream']);
 
 		// Get the fields		
 		$this->fields = $this->CI->streams_m->get_stream_fields($join_stream->id);
@@ -199,7 +208,7 @@ class Field_multiple
 			$html .= $this->CI->raw_parser->parse_string($data['content'], $row, TRUE);
 		}	
 		
-		return $html;
+		return $html;*/
 	}
 	
 	/**
@@ -329,6 +338,11 @@ class Field_multiple
 			return null;
 		}
 
+		// Our UI.
+		// It's either multi or drag/drop. We defaul to dragdrop.
+		$ui = (isset($data['custom']['choose_ui']) and $data['custom']['choose_ui']) ? 
+					$data['custom']['choose_ui'] : 'dragdrop';
+
 		$title_column = $stream->title_column;
 		
 		// Default to ID for title column
@@ -371,23 +385,24 @@ class Field_multiple
 		// Populate the values
 		// Did we submit the form and need to get it from the post val?
         if ($this->CI->input->post($form_data['slug'])) {
-         $items = explode(', ', $this->CI->input->post($form_data['slug']));
+			$items = explode(', ', $this->CI->input->post($form_data['slug']));
+			foreach ($items as $item) {
+				$item = trim($item);
+				$id = str_replace($stream->stream_slug.'_', '', $item);
 
-         foreach ($items as $item) {
-            $item = trim($item);
-            $id = str_replace($stream->stream_slug.'_', '', $item);
+				if (is_numeric($id)) {
+					$this->CI->db->or_where('id', $id);
+        		}
+        	}
 
-            if(is_numeric($id)) $this->CI->db->or_where('id', $id);
-        }
+	        $obj = $this->CI->db->get($stream->stream_prefix.$stream->stream_slug);
 
-        $obj = $this->CI->db->get($stream->stream_prefix.$stream->stream_slug);
-
-        foreach ($obj->result() as $node) {
-            $form_data['current'][$node->id] 	= $node->$title_column;
-        }
+	        foreach ($obj->result() as $node) {
+	            $form_data['current'][$node->id] 	= $node->$title_column;
+	        }
 
 			// We need the imploded current string as well
-       		$form_data['current_string'] = $this->CI->input->post($form_data['slug']);
+	       	$form_data['current_string'] = $this->CI->input->post($form_data['slug']);
 	    }
 	    else {		
 		
@@ -410,7 +425,14 @@ class Field_multiple
 			$form_data['choices'][$row->id] = $row->$title_column;
 		}
 
-		return $this->CI->type->load_view('multiple', 'sort_table', $form_data, true);
+		if ($ui == 'dragdrop') {
+			return $this->CI->type->load_view('multiple', 'sort_table', $form_data, true);
+		}
+		else {
+			return form_multiselect($data['form_slug'].'[]', 
+						$form_data['choices']+$form_data['current'], 
+						array_keys($form_data['current']));
+		}
 	}
 
 	/**
