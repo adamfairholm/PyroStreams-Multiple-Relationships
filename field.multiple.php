@@ -410,6 +410,25 @@ class Field_multiple
 	}
 
 	/**
+	 * Choose the UI
+	 *
+	 * Which UI would you like to use? Users have
+	 * the choice of a drag/drop or a multiple select.
+	 *
+	 * @param 	string [$choice]
+	 * @return 	string the input form
+	 */
+	public function param_choose_ui($choice = null)
+	{
+		$choices = array(
+			'dragdrop' 	=> lang('streams:multiple.drag_drop'),
+			'multi' 	=> lang('streams:multiple.multiselect')
+		);
+
+		return form_dropdown('choose_ui', $choices, $choice);
+	}
+
+	/**
 	 * Get a list of streams to choose from
 	 *
 	 * @param	int [$stream_id]
