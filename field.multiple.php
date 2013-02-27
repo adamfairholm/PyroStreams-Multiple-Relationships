@@ -39,9 +39,9 @@ class Field_multiple
 	 * Instead of a database colunn, we have a
 	 * binding table, so we'll set this to false.
 	 *
-	 * @var 	string
+	 * @var 	string|bool
 	 */
-	public $db_col_type				= null;
+	public $db_col_type				= false;
 
 	/**
 	 * Custom Parameters
