@@ -1,27 +1,37 @@
-# PyroStreams Multiple Relationships Field Type 1.3
+# PyroStreams Multiple Relationships Field Type 2.0-dev
 
 The multiple relationships field type allows you to relate multiple entries to a single entry.
 
 ## Compatibility
 
-This field type is compatible with PyroCMS 2.1.x versions.
+This field type is compatible with PyroCMS 2.2 versions.
+
+## Changelog
+
+### 2.0-dev
+
+* New syntax that takes advantage of the 2.2 plugin override function.
+* Adds support for multi-select as well as the regular drag and drog.
+* UI Enhancements for PyroCMS 2.2.
 
 ## Installation
 
-To install, download from GitHub and rename the folder to "multiple". Put this in your addons/site\_ref/field_types/ or addons/shared\_addons/field\_types folder. Once you've placed it into one of these folders, it'll be ready to use with PyroStreams.
+To install, download from GitHub and rename the folder to "multiple". Put this in your addons/<site\_ref>/field_types/ or addons/shared\_addons/field\_types folder. Once you've placed it into one of these folders, it'll be ready to use with PyroStreams.
 
 ## Usage
 
-To display the related entries, you can run them in a cycle just like you would the main stream with the related function:
+To display the related entries, loop throught your multiple relationship ouput as a tag pair. You can use all of the parameters available to you on the main streams cycle.
 
-	{{ streams:cycle stream="real_estate_agents" }}
+Example:
+
+	{{ streams:cycle stream="owners" }}
 
 	<h2>{{ name }}</h2>
 
 		<ul>
-		{{ streams:multiple field="real_estate_listings" order_by="address" limit="5" }}
-		<li>{{ address }}</li>
-		{{ /streams:multiple }}
+		{{ dogs order_by="name" limit="5" }}
+		  <li>{{ name }}</li>
+		{{ dogs }}
 		</ul>
 	  
 	{{ /streams:cycle }}
