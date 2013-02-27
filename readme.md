@@ -1,6 +1,10 @@
-# PyroStreams Multiple Relationships Field Type
+# PyroStreams Multiple Relationships Field Type 1.3
 
-Formerly a part of PyroStreams, the multiple relationships field type allows you to relate multiple entries to a single entry.
+The multiple relationships field type allows you to relate multiple entries to a single entry.
+
+## Compatibility
+
+This field type is compatible with PyroCMS 2.1.x versions.
 
 ## Installation
 
