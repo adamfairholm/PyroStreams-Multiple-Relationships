@@ -330,7 +330,7 @@ class Field_multiple
 		// Figure out Join Table
 		// -------------------------------------
 
-		$join_table = $stream->stream_prefix.$field->stream_slug.'_'.$stream->stream_slug;
+		$join_table = $field->stream_prefix.$field->stream_slug.'_'.$stream->stream_slug;
 		
 		// -------------------------------------
 		// Get current data
