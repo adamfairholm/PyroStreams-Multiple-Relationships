@@ -178,38 +178,41 @@ class Field_multiple
 	/**
 	 * Plugin Override
 	 *
-	 * @param	array
+	 * @param	obj
+	 * @param 	array
 	 * @return	string
 	 */
-	public function plugin_override($data)
+	public function plugin_override($field, $attributes)
 	{
-		return $this->attribute('field');
-		
+		//return '<pre>'.print_r($attributes, true).'</pre>';
+
 		// Get the stream
-		/*$join_stream = $this->CI->streams_m->get_stream($data['field']->field_data['choose_stream']);
+		$join_stream = $this->CI->streams_m->get_stream($field->field_data['choose_stream']);
 
-		// Get the fields		
-		$this->fields = $this->CI->streams_m->get_stream_fields($join_stream->id);
-		
-		// Add the join_multiple hook to the get_rows function
-		$this->CI->row_m->get_rows_hook = array($this, 'join_multiple');
-		$this->CI->row_m->get_rows_hook_data = array(
-			'join_table' => $stream->stream_prefix.$data['field']->stream_slug.'_'.$join_stream->stream_slug,
-			'join_stream' => $join_stream,
-			'row_id' =>  $data['row']['id']);
+		// Our binding table.
+		// @todo: See if this breaks streams with prefixes.
+		$join_table = $attributes['stream_slug'].'_'.$join_stream->stream_slug;
 
-		// Get the rows
-		$this->rows = $this->CI->row_m->get_rows($params, $this->fields, $join_stream);
+		$params = array(
+			'stream'        => $join_stream->stream_name,
+			'namespace'     => $join_stream->stream_namespace
+		);
+
+		// Add in any more params.
+		$params = array_merge($params, $attributes);
+
+		$this->CI->row_m->sql['from'][] = $this->CI->db->protect_identifiers($join_table, true);
 		
-		$html = '';
-		
-		foreach ($this->rows['rows'] as $row) {
-			$html .= $this->CI->raw_parser->parse_string($data['content'], $row, TRUE);
-		}	
-		
-		return $html;*/
-	}
-	
+		// Filter by our row ID
+		$this->CI->row_m->sql['where'][] = $this->CI->db->protect_identifiers($join_table.'.row_id', true)."='".$attributes['row_id']."'";
+
+		$this->CI->row_m->sql['where'][] = $this->CI->db->protect_identifiers($join_table.'.dogs_id', true).'='.$this->CI->db->protect_identifiers($join_stream->stream_prefix.$join_stream->stream_name.'.id', true);
+
+		$entries = $this->CI->streams->entries->get_entries($params);
+
+		return $entries['entries'];
+	}	
+
 	/**
 	 * Join multiple hook
 	 */
