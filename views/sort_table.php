@@ -2,7 +2,7 @@
 
 	if(!defined('PYROSTREAMS_MULT_JS_LOADED')):
 		
-		if (substr(CMS_VERSION, 0, 3) == '2.1') {
+		if (substr(CMS_VERSION, 0, 3) >= '2.1') {
 			$streams = 'streams_core';
 		}
 		else {
