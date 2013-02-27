@@ -120,7 +120,6 @@ class Field_multiple
 				$stream->stream_slug.'_id'			=> $stream->id,
 				$linked_stream->stream_slug.'_id'	=> $item_id
              );
-			print_r($insert_data);
 			
 			$this->CI->db->insert($table_name, $insert_data);
 		}
