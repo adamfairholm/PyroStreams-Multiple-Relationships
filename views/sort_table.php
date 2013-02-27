@@ -47,7 +47,7 @@
 <table class="mult_lists" cellpadding="0" cellspacing="0">
 
 <tr>
-	<th width="250">Available Options</th>
+	<th width="50%">Available Options</th>
 	<th>Selected Options</th>
 </tr>
 
