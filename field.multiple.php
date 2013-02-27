@@ -51,7 +51,7 @@ class Field_multiple
 	 *
 	 * @var 	array
 	 */
-	public $custom_parameters		= array('choose_stream');
+	public $custom_parameters		= array('choose_stream', 'choose_ui');
 
 	/**
 	 * Version Number
@@ -173,6 +173,8 @@ class Field_multiple
 	 */
 	public function plugin_override($data)
 	{
+		// @todo
+
 		$params = $data['attributes'];
 		
 		// Get the stream
@@ -274,7 +276,9 @@ class Field_multiple
 		// If the linked stream was already deleted, we have a bit
 		// of a problem since we can't get the stream slug.
 		// Until we figure that out, here's this:
-		if ( ! $linked_stream) return null;
+		if ( ! $linked_stream) {
+			return null;
+		}
 
 		// Get the table name
 		$table_name = $stream->stream_prefix.$stream->stream_slug.'_'.$linked_stream->stream_slug;
@@ -456,7 +460,11 @@ class Field_multiple
 		$extra = '';
 
 		if ($this->CI->uri->segment(4) == 'edit') {
-			return 'You cannot change a multiple relationship field stream once it has been assigned.';
+			
+			$html  = '<strong>'.$stream->stream_name.'</strong><br>';
+			$html .= '<input type="hidden" name="choose_stream" value="'.$stream_id.'" />';
+			return $html .= '<em>'.lang('streams:multiple.no_change').'</em>';
+
 			$extra = 'readonly';
 		}
 		
