@@ -21,7 +21,7 @@ class Field_multiple
 
 	public $custom_parameters		= array('choose_stream');
 
-	public $version					= '1.2';
+	public $version					= '1.3.0';
 
 	public $author					= array('name'=>'Parse19', 'url'=>'http://parse19.com');
 
