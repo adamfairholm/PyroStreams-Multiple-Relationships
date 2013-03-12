@@ -191,10 +191,10 @@ class Field_multiple
 
 		// Our binding table.
 		// @todo: See if this breaks streams with prefixes.
-		$join_table = $attributes['stream_slug'].'_'.$join_stream->stream_slug;
+		$join_table = $join_stream->stream_prefix.$attributes['stream_slug'].'_'.$join_stream->stream_slug;
 
 		$params = array(
-			'stream'        => $join_stream->stream_name,
+			'stream'        => $join_stream->stream_slug,
 			'namespace'     => $join_stream->stream_namespace
 		);
 
@@ -206,7 +206,7 @@ class Field_multiple
 		// Filter by our row ID
 		$this->CI->row_m->sql['where'][] = $this->CI->db->protect_identifiers($join_table.'.row_id', true)."='".$attributes['row_id']."'";
 
-		$this->CI->row_m->sql['where'][] = $this->CI->db->protect_identifiers($join_table.'.dogs_id', true).'='.$this->CI->db->protect_identifiers($join_stream->stream_prefix.$join_stream->stream_name.'.id', true);
+		$this->CI->row_m->sql['where'][] = $this->CI->db->protect_identifiers($join_table.'.'.$join_stream->stream_slug.'_id', true).'='.$this->CI->db->protect_identifiers($join_stream->stream_prefix.$join_stream->stream_slug.'.id', true);
 
 		$entries = $this->CI->streams->entries->get_entries($params);
 
