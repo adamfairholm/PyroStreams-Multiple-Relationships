@@ -190,8 +190,7 @@ class Field_multiple
 		$join_stream = $this->CI->streams_m->get_stream($field->field_data['choose_stream']);
 
 		// Our binding table.
-		// @todo: See if this breaks streams with prefixes.
-		$join_table = $attributes['stream_slug'].'_'.$join_stream->stream_slug;
+		$join_table = $join_stream->stream_prefix.$attributes['stream_slug'].'_'.$join_stream->stream_slug;
 
 		$params = array(
 			'stream'        => $join_stream->stream_name,
