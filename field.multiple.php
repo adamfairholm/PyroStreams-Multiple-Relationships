@@ -432,7 +432,7 @@ class Field_multiple
 		}
 		else {
 			return form_multiselect($data['form_slug'].'[]', 
-						$form_data['choices']+$form_data['current'], 
+						(array) $form_data['choices']+ (array) $form_data['current'], 
 						array_keys($form_data['current']));
 		}
 	}
