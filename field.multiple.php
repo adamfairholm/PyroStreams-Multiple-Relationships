@@ -162,8 +162,8 @@ class Field_multiple
 		$html = '<ul>';
 
 		$this->CI->db->from($join_table.' AS jt');
-		$this->CI->db->where('jt.row_id', $row_id, false);
 		$this->CI->db->join($stream->stream_prefix.$join_stream->stream_slug, 'jt.'.$join_stream->stream_slug.'_id = '.$stream->stream_prefix.$join_stream->stream_slug.'.id');
+		$this->CI->db->where('jt.row_id', $row_id, false);
 		$query = $this->CI->db->get();
 		
 		foreach ($query->result() as $node) {
