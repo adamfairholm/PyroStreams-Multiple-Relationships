@@ -193,7 +193,7 @@ class Field_multiple
 		$join_table = $join_stream->stream_prefix.$attributes['stream_slug'].'_'.$join_stream->stream_slug;
 
 		$params = array(
-			'stream'        => $join_stream->stream_name,
+			'stream'        => $join_stream->stream_slug,
 			'namespace'     => $join_stream->stream_namespace
 		);
 
