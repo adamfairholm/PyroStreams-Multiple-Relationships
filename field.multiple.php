@@ -286,7 +286,7 @@ class Field_multiple
 			$stream->stream_prefix.$stream->stream_slug,
 			array(
 				$field->field_slug => array(
-					'type' => 'LONGTEXT',
+					'type' => 'TEXT',
 					'null' => true
 					)
 				)
