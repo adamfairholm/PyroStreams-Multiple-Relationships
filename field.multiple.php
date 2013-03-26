@@ -100,6 +100,9 @@ class Field_multiple
 			$items = $input;
 		}
 		
+		// We'll glue / return these
+		$ids = array();
+		
 		foreach ($items as $item) {
 			
 			if (trim($item) == '') {
@@ -116,13 +119,17 @@ class Field_multiple
 			}
 
 			$insert_data = array(
-				'row_id'							=> $row_id,
-				$stream->stream_slug.'_id'			=> $stream->id,
+				'row_id'				=> $row_id,
+				$stream->stream_slug.'_id'		=> $stream->id,
 				$linked_stream->stream_slug.'_id'	=> $item_id
-             );
+             		);
+             		
+             		$ids[] = $item_id;
 			
 			$this->CI->db->insert($table_name, $insert_data);
 		}
+		
+		return '*'.implode('*', $ids).'*';
 	}
 
 	/**
@@ -248,26 +255,42 @@ class Field_multiple
 		$table_name = $stream->stream_prefix.$stream->stream_slug.'_'.$linked_stream->stream_slug;
 
 		$fields = array(
-           'id' => array(
-              'type' => 'INT',
-              'constraint' => 11, 
-              'unsigned' => true,
-              'auto_increment' => true),
-           'row_id' => array(
-              'type' => 'INT',
-              'constraint' => 11),
-           $stream->stream_slug.'_id' => array(
-              'type' => 'INT',
-              'constraint' => 11),
-           $linked_stream->stream_slug.'_id' => array(
-              'type' => 'INT',
-              'constraint' => 11)
-           );
+			'id' => array(
+				'type' => 'INT',
+				'constraint' => 11, 
+				'unsigned' => true,
+				'auto_increment' => true
+				),
+			'row_id' => array(
+				'type' => 'INT',
+				'constraint' => 11
+				),
+			$stream->stream_slug.'_id' => array(
+				'type' => 'INT',
+				'constraint' => 11
+				),
+			$linked_stream->stream_slug.'_id' => array(
+				'type' => 'INT',
+				'constraint' => 11
+				)
+			);
+		           
 		
 		$this->CI->dbforge->add_field($fields);
 		$this->CI->dbforge->add_key('id', true);
 		
 		$this->CI->dbforge->create_table($table_name);
+		
+		// Add a column so we can filter by values
+		$this->CI->dbforge->add_column(
+			$stream->stream_prefix.$stream->stream_slug,
+			array(
+				$field->field_slug => array(
+					'type' => 'LONGTEXT',
+					'null' => true
+					)
+				)
+			);
 	}
 
 	/**
