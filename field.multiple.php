@@ -31,7 +31,7 @@ class Field_multiple
 	 *
 	 * @var 	bool
 	 */
-	public $alt_process				= true;
+	public $alt_process				= false;
 	
 	/**
 	 * Database Column Type
