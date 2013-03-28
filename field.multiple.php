@@ -193,7 +193,11 @@ class Field_multiple
 		$join_stream = $this->CI->streams_m->get_stream($field->field_data['choose_stream']);
 
 		// Our binding table.
-		$join_table = $field->field_namespace.'_'.$attributes['stream_slug'].'_'.$join_stream->stream_slug;
+		if ($field->field_namespace == 'pages') {
+			$join_table = $field->field_namespace.'_'.$attributes['stream_slug'].'_'.$join_stream->stream_slug;
+		} else {
+			$join_table = $attributes['stream_slug'].'_'.$join_stream->stream_slug;
+		}
 
 		$params = array(
 			'stream'        => $join_stream->stream_slug,
@@ -205,6 +209,7 @@ class Field_multiple
 
 		unset($params['row_id']);
 		unset($params['parse_params']);
+		unset($params['stream_slug']);
 
 		$this->CI->row_m->sql['from'][] = $this->CI->db->protect_identifiers($join_table, true);
 		
