@@ -128,8 +128,6 @@ class Field_multiple
 			
 			$this->CI->db->insert($table_name, $insert_data);
 		}
-		
-		return '*'.implode('*', $ids).'*';
 	}
 
 	/**
