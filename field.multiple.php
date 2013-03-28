@@ -272,8 +272,7 @@ class Field_multiple
 				'type' => 'INT',
 				'constraint' => 11
 				)
-			);
-		           
+			);     
 		
 		$this->CI->dbforge->add_field($fields);
 		$this->CI->dbforge->add_key('id', true);
@@ -281,7 +280,7 @@ class Field_multiple
 		$this->CI->dbforge->create_table($table_name);
 		
 		// Add a column so we can filter by values
-		$this->CI->dbforge->add_column(
+		/*$this->CI->dbforge->add_column(
 			$stream->stream_prefix.$stream->stream_slug,
 			array(
 				$field->field_slug => array(
@@ -289,7 +288,7 @@ class Field_multiple
 					'null' => true
 					)
 				)
-			);
+			);*/
 	}
 
 	/**
