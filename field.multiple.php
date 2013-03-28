@@ -445,6 +445,8 @@ class Field_multiple
 
 		$obj = $this->CI->db->get($stream->stream_prefix.$stream->stream_slug);
 
+		$form_data['choices'] = array();
+
 		foreach ($obj->result() as $row) {
 			// Need to replace with title column
 			$form_data['choices'][$row->id] = $row->$title_column;
