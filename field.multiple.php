@@ -149,7 +149,7 @@ class Field_multiple
 		$title_column = $join_stream->title_column;
 		
 		// Default to ID for title column if not present
-		if ( ! trim($title_column) or ! $this->CI->db->field_exists($title_column, $stream->stream_prefix.$stream->stream_slug.'_'.$join_stream->stream_slug))
+		if ( ! trim($title_column) or ! $this->CI->db->field_exists($title_column, $stream->stream_prefix.$join_stream->stream_slug))
 		{
 			$title_column = 'id';
 		}
@@ -169,7 +169,7 @@ class Field_multiple
 		$html = '<ul>';
 
 		$this->CI->db->from($join_table.' AS jt');
-		$this->CI->db->join($join_stream->stream_prefix.$join_stream->stream_slug, 'jt.'.$join_stream->stream_slug.'_id = '.$join_stream->stream_prefix.$join_stream->stream_slug.'.id');
+		$this->CI->db->join($stream->stream_prefix.$join_stream->stream_slug, 'jt.'.$join_stream->stream_slug.'_id = '.$stream->stream_prefix.$join_stream->stream_slug.'.id');
 		$this->CI->db->where('jt.row_id', $row_id, false);
 		$query = $this->CI->db->get();
 		
@@ -191,13 +191,11 @@ class Field_multiple
 	 */
 	public function plugin_override($field, $attributes)
 	{
-		//return '<pre>'.print_r($attributes, true).'</pre>';
-
 		// Get the stream
 		$join_stream = $this->CI->streams_m->get_stream($field->field_data['choose_stream']);
 
 		// Our binding table.
-		$join_table = $join_stream->stream_prefix.$attributes['stream_slug'].'_'.$join_stream->stream_slug;
+		$join_table = $field->field_namespace.'_'.$attributes['stream_slug'].'_'.$join_stream->stream_slug;
 
 		$params = array(
 			'stream'        => $join_stream->stream_slug,
@@ -206,6 +204,9 @@ class Field_multiple
 
 		// Add in any more params.
 		$params = array_merge($params, $attributes);
+
+		unset($params['row_id']);
+		unset($params['parse_params']);
 
 		$this->CI->row_m->sql['from'][] = $this->CI->db->protect_identifiers($join_table, true);
 		
