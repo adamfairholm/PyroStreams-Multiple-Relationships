@@ -90,6 +90,9 @@ class Field_multiple
 		}
 		else {
 			$row_id = $id;
+			// core modules update fix (multiple save issue)
+			$this->CI->db->where('row_id', $row_id)->delete($table_name);
+
 		}
 		
 		// Go through and add the values
