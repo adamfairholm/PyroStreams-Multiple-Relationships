@@ -85,7 +85,7 @@ class Field_multiple
 		// Are we editing this row?
 		// If so, clear the data. We are just going to
 		// replace it so now sense in trying to update it
-		if (is_numeric($row_id = $form_data['row_edit_id'])) {
+		if (isset($form_data['row_edit_id']) && is_numeric($row_id = $form_data['row_edit_id'])) {
 			$this->CI->db->where('row_id', $form_data['row_edit_id'])->delete($table_name);
 		}
 		else {
