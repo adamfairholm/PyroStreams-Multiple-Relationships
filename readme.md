@@ -39,3 +39,26 @@ Example:
 		</ul>
 	  
 	{{ /streams:cycle }}
+
+## API Usage
+
+For efficiency, in the tag system, the multiple relationships field type is only called if you need it. So, if you have a multiple relationship field call "locations", you'd do this in the tag system:
+
+	{{ locations limit="3" }}
+		{{ location_name }}
+	{{ /locations }}
+
+That tag is calling a function in the field type named `plugin_override()`, which fetches the rows based on the attributes we give it.
+
+So, when you want to use multiple relationship values via the Streams API with PHP, you need to replicate this logic based on whether you need the data or not. Since field types are PHP classes, you can pass it the data like this and get the entries back manually:
+
+	$field = $this->field_m->get_field($fieldId);
+	 
+	$attributes = array(
+	  'stream_slug' => 'sample', // The stream of the related stream.
+	  'row_id' => $rowId, // The ID of the current entry row.
+	);
+	 
+	$entries = $this->type->types->multiple->plugin_override($field, $attributes);
+
+This helps keep database calls as efficient as possible while giving you more control over what streams is and what data it is fetching. 
