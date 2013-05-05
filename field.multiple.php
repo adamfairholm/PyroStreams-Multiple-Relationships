@@ -412,7 +412,14 @@ class Field_multiple
 		// Populate the values
 		// Did we submit the form and need to get it from the post val?
         if ($this->CI->input->post($form_data['slug'])) {
-			$items = explode(', ', $this->CI->input->post($form_data['slug']));
+
+        	// Is this post an array or a string?
+        	if (is_array($this->CI->input->post($form_data['slug']))) {
+        		$items = $this->CI->input->post($form_data['slug']);
+        	} else {
+				$items = explode(', ', $this->CI->input->post($form_data['slug']));
+        	}
+			
 			foreach ($items as $item) {
 				$item = trim($item);
 				$id = str_replace($stream->stream_slug.'_', '', $item);
