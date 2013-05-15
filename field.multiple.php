@@ -219,6 +219,42 @@ class Field_multiple
 		$this->CI->row_m->sql['where'][] = $this->CI->db->protect_identifiers($join_table.'.'.$join_stream->stream_slug.'_id', true).'='.$this->CI->db->protect_identifiers($join_stream->stream_prefix.$join_stream->stream_slug.'.id', true);
 
 		$entries = $this->CI->streams->entries->get_entries($params);
+		
+		// -------------------------------------
+		// Rename
+		// -------------------------------------
+		// Allows us to rename variables in our
+		// parameters. So, rename:old_name="new_name"
+		// -------------------------------------
+		
+		$renames = array();
+
+		foreach ($attributes as $key => $to)
+		{
+			if (substr($key, 0, 7) == 'rename:' and strlen($key) > 7)
+			{
+				$pieces = explode(':', $key);
+			
+				$renames[$pieces[1]] = $to;
+			}
+		}
+
+		if ($renames)
+		{
+			foreach ($entries['entries'] as $k => $arr)
+			{
+				foreach ($renames as $from => $to)
+				{
+					if (isset($entries['entries'][$k][$from]))
+					{
+						$entries['entries'][$k][$to] = $entries['entries'][$k][$from];
+						unset($entries['entries'][$k][$from]);
+					}
+				}
+			}
+		}
+		
+		// -------------------------------------
 
 		return $entries['entries'];
 	}	
