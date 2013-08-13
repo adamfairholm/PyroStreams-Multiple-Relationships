@@ -147,7 +147,7 @@ class Field_multiple
 		$title_column = $join_stream->title_column;
 		
 		// Default to ID for title column if not present
-		if ( ! trim($title_column) or ! $this->CI->db->field_exists($title_column, $stream->stream_prefix.$join_stream->stream_slug))
+		if ( ! trim($title_column) or ! $this->CI->db->field_exists($title_column, $stream->stream_prefix.$stream->stream_slug.'_'.$join_stream->stream_slug))
 		{
 			$title_column = 'id';
 		}
@@ -167,7 +167,7 @@ class Field_multiple
 		$html = '<ul>';
 
 		$this->CI->db->from($join_table.' AS jt');
-		$this->CI->db->join($stream->stream_prefix.$join_stream->stream_slug, 'jt.'.$join_stream->stream_slug.'_id = '.$stream->stream_prefix.$join_stream->stream_slug.'.id');
+		$this->CI->db->join($stream->stream_prefix.$stream->stream_slug.'_'.$join_stream->stream_slug, 'jt.'.$join_stream->stream_slug.'_id = '.$stream->stream_prefix.$stream->stream_slug.'_'.$join_stream->stream_slug.'.id');
 		$this->CI->db->where('jt.row_id', $row_id, false);
 		$query = $this->CI->db->get();
 		
