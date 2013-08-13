@@ -554,10 +554,18 @@ class Field_multiple
 		$extra = '';
 
 		if ($this->CI->uri->segment(4) == 'edit') {
-			
-			$html  = '<strong>'.$stream->stream_name.'</strong><br>';
-			$html .= '<input type="hidden" name="choose_stream" value="'.$stream_id.'" />';
-			return $html .= '<em>'.lang('streams:multiple.no_change').'</em>';
+
+			// Get the stream.
+			$currentStream = $this->CI
+								->streams_m->get_stream($stream_id);
+
+			if ( ! $stream) {
+				$html = '<strong>No stream found</strong>';
+			} else {		
+				$html  = '<strong>'.$currentStream->stream_name.'</strong><br>';
+				$html .= '<input type="hidden" name="choose_stream" value="'.$stream_id.'" />';
+				return $html .= '<em>'.lang('streams:multiple.no_change').'</em>';
+			}
 
 			$extra = 'readonly';
 		}
