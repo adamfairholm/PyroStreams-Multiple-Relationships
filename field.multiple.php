@@ -194,9 +194,9 @@ class Field_multiple
 
 		// Our binding table.
 		if ($field->field_namespace == 'pages') {
-			$join_table = $field->field_namespace.'_'.$attributes['stream_slug'].'_'.$join_stream->stream_slug;
+			$join_table = $field->field_namespace.'_'.$join_stream->stream_prefix.$attributes['stream_slug'].'_'.$join_stream->stream_slug;
 		} else {
-			$join_table = $attributes['stream_slug'].'_'.$join_stream->stream_slug;
+			$join_table = $join_stream->stream_prefix.$attributes['stream_slug'].'_'.$join_stream->stream_slug;
 		}
 
 		$params = array(
