@@ -559,8 +559,8 @@ class Field_multiple
 			$currentStream = $this->CI
 								->streams_m->get_stream($stream_id);
 
-			if ( ! $stream) {
-				$html = '<strong>No stream found</strong>';
+			if ( ! $currentStream) {
+				return '<strong>No stream found</strong>';
 			} else {		
 				$html  = '<strong>'.$currentStream->stream_name.'</strong><br>';
 				$html .= '<input type="hidden" name="choose_stream" value="'.$stream_id.'" />';
