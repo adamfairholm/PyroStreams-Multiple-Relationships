@@ -256,8 +256,60 @@ class Field_multiple
 		
 		// -------------------------------------
 
-		return $entries['entries'];
-	}	
+		// Try to rename fields
+	        $renames = array();
+	
+	        foreach ($attributes as $key => $to)
+	        {
+	            if (substr($key, 0, 7) == 'rename:' and strlen($key) > 7)
+	            {
+	                $pieces = explode(':', $key);
+	
+	                $renames[$pieces[1]] = $to;
+	            }
+	        }
+	
+	        if($renames){
+	
+	            $entries = $this->rename_fields($entries['entries'],$renames);
+	
+	        } else {
+	
+	            $entries = $entries['entries'];
+	
+	        }
+
+		return $entries;
+	}
+	
+	/**
+	* Rename columns that needs to be renamed and return entries
+	*/
+	public function rename_fields($entries,$renames){
+		// -------------------------------------
+		// Rename
+		// -------------------------------------
+		// Allows us to rename variables in our
+		// parameters. So, rename:old_name="new_name"
+		// -------------------------------------
+		if ($renames) {
+		    foreach ($entries as $k => $arr)
+		    {
+		        foreach ($renames as $from => $to)
+		        {
+		
+		            if (isset($entries[$k][$from]))
+		            {
+		                $entries[$k][$to] = $entries[$k][$from];
+		                unset($entries[$k][$from]);
+		            }
+		
+		        }
+		    }
+		}
+		
+		return $entries;
+	}
 
 	/**
 	 * Join multiple hook
