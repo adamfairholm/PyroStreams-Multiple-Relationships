@@ -219,7 +219,9 @@ class Field_multiple
 		$this->CI->row_m->sql['where'][] = $this->CI->db->protect_identifiers($join_table.'.'.$join_stream->stream_slug.'_id', true).'='.$this->CI->db->protect_identifiers($join_stream->stream_prefix.$join_stream->stream_slug.'.id', true);
 
 		$entries = $this->CI->streams->entries->get_entries($params);
-
+		echo '<pre>';
+		print_r($entries['entries']);
+		echo '</pre>';
 		return $entries['entries'];
 	}	
 
@@ -412,15 +414,21 @@ class Field_multiple
 		// Populate the values
 		// Did we submit the form and need to get it from the post val?
         if ($this->CI->input->post($form_data['slug'])) {
-			$items = explode(', ', $this->CI->input->post($form_data['slug']));
-			foreach ($items as $item) {
-				$item = trim($item);
-				$id = str_replace($stream->stream_slug.'_', '', $item);
+        	
+        	$items = $this->CI->input->post($form_data['slug']);
+        	
+			if($items)
+			{
+				foreach ($items as $item) {
+					$item = trim($item);
+					$id = str_replace($stream->stream_slug.'_', '', $item);
 
-				if (is_numeric($id)) {
-					$this->CI->db->or_where('id', $id);
-        		}
-        	}
+					if (is_numeric($id)) {
+						$this->CI->db->or_where('id', $id);
+	        		}
+	        	}
+			}
+			
 
 	        $obj = $this->CI->db->get($stream->stream_prefix.$stream->stream_slug);
 
