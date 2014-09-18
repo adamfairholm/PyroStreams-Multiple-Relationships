@@ -6,3 +6,5 @@ $lang['streams:multiple.choose_ui']     = 'Choose UI';
 $lang['streams:multiple.drag_drop']     = 'Drag/Drop';
 $lang['streams:multiple.multiselect']   = 'Multiselect';
 $lang['streams:multiple.no_change']     = 'You cannot change a multiple relationship field stream once it has been assigned.';
+$lang['streams:multiple.available_opt'] = 'Available Options';
+$lang['streams:multiple.selected_opt']  = 'Selected Options';
