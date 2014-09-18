@@ -47,8 +47,8 @@
 <table class="mult_lists" cellpadding="0" cellspacing="0">
 
 <tr>
-	<th width="50%">Available Options</th>
-	<th>Selected Options</th>
+	<th width="50%"><?php echo lang('streams:multiple.available_opt'); ?></th>
+	<th><?php echo lang('streams:multiple.selected_opt'); ?></th>
 </tr>
 
 <tr>
